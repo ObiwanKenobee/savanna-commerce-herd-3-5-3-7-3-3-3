@@ -434,7 +434,7 @@ const EnterpriseFooter = () => {
       <div className="bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-black py-2">
         <div className="w-full px-4 text-center">
           <div className="text-sm font-semibold">
-            🦁 Built by Africans, for the World • Proudly serving Kenya since
+            🦁 Built by the Universe, for Consiousness • Proudly serving Kenya since
             2025 🌍
           </div>
         </div>
