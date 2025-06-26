@@ -1,0 +1,569 @@
+/* 🦁 Wildlife-Themed Route Transitions for Savanna Marketplace */
+
+/* Base transition classes */
+.route-transition {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Cheetah Sprint - Fast navigation transitions */
+.cheetah-transition-enter {
+  opacity: 0;
+  transform: translateX(100px) scale(0.95);
+}
+
+.cheetah-transition-enter-active {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.cheetah-transition-exit {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+.cheetah-transition-exit-active {
+  opacity: 0;
+  transform: translateX(-100px) scale(0.95);
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Add cheetah spots animation during transition */
+.cheetah-transition-enter-active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(218, 165, 32, 0.1) 25%,
+    rgba(218, 165, 32, 0.3) 50%,
+    rgba(218, 165, 32, 0.1) 75%,
+    transparent 100%
+  );
+  background-image:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(139, 69, 19, 0.3) 2px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 60% 40%,
+      rgba(139, 69, 19, 0.3) 2px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      rgba(139, 69, 19, 0.3) 2px,
+      transparent 2px
+    );
+  animation: cheetah-sprint 0.3s ease-out;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+@keyframes cheetah-sprint {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Elephant Walk - Heavy data page transitions */
+.elephant-transition-enter {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.elephant-transition-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.elephant-transition-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.elephant-transition-exit-active {
+  opacity: 0;
+  transform: scale(1.05);
+  transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Elephant footsteps effect */
+.elephant-transition-enter-active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: linear-gradient(
+    90deg,
+    rgba(169, 169, 169, 0.6) 0%,
+    rgba(169, 169, 169, 0.3) 50%,
+    rgba(169, 169, 169, 0.6) 100%
+  );
+  animation: elephant-steps 0.8s ease-in-out;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+@keyframes elephant-steps {
+  0% {
+    transform: scaleX(0);
+    filter: blur(4px);
+  }
+  50% {
+    transform: scaleX(0.5);
+    filter: blur(2px);
+  }
+  100% {
+    transform: scaleX(1);
+    filter: blur(0);
+  }
+}
+
+/* Gazelle Bounce - Retail/quick pages */
+.gazelle-transition-enter {
+  opacity: 0;
+  transform: translateY(30px) scale(0.98);
+}
+
+.gazelle-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.gazelle-transition-exit {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.gazelle-transition-exit-active {
+  opacity: 0;
+  transform: translateY(-30px) scale(0.98);
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Lion Roar - Admin/important pages */
+.lion-transition-enter {
+  opacity: 0;
+  transform: scale(0.8) rotate(-2deg);
+  filter: brightness(0.8);
+}
+
+.lion-transition-enter-active {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  filter: brightness(1);
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.lion-transition-exit {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  filter: brightness(1);
+}
+
+.lion-transition-exit-active {
+  opacity: 0;
+  transform: scale(1.1) rotate(1deg);
+  filter: brightness(1.2);
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Lion mane ripple effect */
+.lion-transition-enter-active::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 2px solid rgba(205, 133, 63, 0.4);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: lion-roar 0.6s ease-out;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+@keyframes lion-roar {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  70% {
+    width: 200px;
+    height: 200px;
+    opacity: 0.6;
+  }
+  100% {
+    width: 400px;
+    height: 400px;
+    opacity: 0;
+  }
+}
+
+/* Hyena Laugh - Error pages */
+.hyena-transition-enter {
+  opacity: 0;
+  transform: translateX(-50px) rotate(-5deg);
+  filter: hue-rotate(20deg);
+}
+
+.hyena-transition-enter-active {
+  opacity: 1;
+  transform: translateX(0) rotate(0deg);
+  filter: hue-rotate(0deg);
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.hyena-transition-exit {
+  opacity: 1;
+  transform: translateX(0) rotate(0deg);
+}
+
+.hyena-transition-exit-active {
+  opacity: 0;
+  transform: translateX(50px) rotate(5deg);
+  transition: all 0.4s ease-in;
+}
+
+/* Vulture Circle - Loading transitions */
+.vulture-transition-enter {
+  opacity: 0;
+  transform: scale(0.5) rotate(180deg);
+}
+
+.vulture-transition-enter-active {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Vulture circling effect */
+.vulture-transition-enter-active::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(139, 125, 107, 0.6);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: vulture-circle 1s linear;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+@keyframes vulture-circle {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Antelope Path - Navigation transitions */
+.antelope-transition-enter {
+  opacity: 0;
+}
+
+.antelope-transition-enter-active {
+  opacity: 1;
+  transition: opacity 0.4s ease-in-out;
+  position: relative;
+}
+
+.antelope-transition-exit {
+  opacity: 1;
+}
+
+.antelope-transition-exit-active {
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+}
+
+/* Antelope path trail effect */
+.antelope-transition-enter-active::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(139, 125, 107, 0.6) 25%,
+    rgba(139, 125, 107, 0.8) 50%,
+    rgba(139, 125, 107, 0.6) 75%,
+    transparent 100%
+  );
+  background-size: 40px 100%;
+  animation: antelope-path 0.4s ease-in-out;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+@keyframes antelope-path {
+  0% {
+    background-position: -40px 0;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    background-position: 100% 0;
+    opacity: 0;
+  }
+}
+
+/* Baobab Growth - Dashboard transitions */
+.baobab-transition-enter {
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: bottom center;
+}
+
+.baobab-transition-enter-active {
+  opacity: 1;
+  transform: scaleY(1);
+  transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform-origin: bottom center;
+}
+
+.baobab-transition-exit {
+  opacity: 1;
+  transform: scaleY(1);
+  transform-origin: bottom center;
+}
+
+.baobab-transition-exit-active {
+  opacity: 0;
+  transform: scaleY(0);
+  transition: all 0.5s ease-in;
+  transform-origin: bottom center;
+}
+
+/* Mobile-optimized transitions (reduce motion for performance) */
+@media (max-width: 768px) {
+  .cheetah-transition-enter-active,
+  .cheetah-transition-exit-active {
+    transition-duration: 0.2s !important;
+  }
+
+  .elephant-transition-enter-active,
+  .elephant-transition-exit-active {
+    transition-duration: 0.4s !important;
+  }
+
+  .lion-transition-enter-active,
+  .lion-transition-exit-active {
+    transition-duration: 0.3s !important;
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .cheetah-transition-enter-active,
+  .cheetah-transition-exit-active,
+  .elephant-transition-enter-active,
+  .elephant-transition-exit-active,
+  .gazelle-transition-enter-active,
+  .gazelle-transition-exit-active,
+  .lion-transition-enter-active,
+  .lion-transition-exit-active,
+  .hyena-transition-enter-active,
+  .hyena-transition-exit-active,
+  .vulture-transition-enter-active,
+  .vulture-transition-exit-active,
+  .antelope-transition-enter-active,
+  .antelope-transition-exit-active,
+  .baobab-transition-enter-active,
+  .baobab-transition-exit-active {
+    transition: opacity 0.2s ease-in-out !important;
+    transform: none !important;
+  }
+
+  .cheetah-transition-enter-active::before,
+  .elephant-transition-enter-active::after,
+  .lion-transition-enter-active::before,
+  .vulture-transition-enter-active::before,
+  .antelope-transition-enter-active::after {
+    display: none !important;
+  }
+}
+
+/* Low power mode - minimal transitions */
+.low-power-mode .cheetah-transition-enter-active,
+.low-power-mode .cheetah-transition-exit-active,
+.low-power-mode .elephant-transition-enter-active,
+.low-power-mode .elephant-transition-exit-active,
+.low-power-mode .gazelle-transition-enter-active,
+.low-power-mode .gazelle-transition-exit-active,
+.low-power-mode .lion-transition-enter-active,
+.low-power-mode .lion-transition-exit-active,
+.low-power-mode .hyena-transition-enter-active,
+.low-power-mode .hyena-transition-exit-active,
+.low-power-mode .vulture-transition-enter-active,
+.low-power-mode .vulture-transition-exit-active,
+.low-power-mode .antelope-transition-enter-active,
+.low-power-mode .antelope-transition-exit-active,
+.low-power-mode .baobab-transition-enter-active,
+.low-power-mode .baobab-transition-exit-active {
+  transition: opacity 0.1s linear !important;
+  transform: none !important;
+}
+
+.low-power-mode .cheetah-transition-enter-active::before,
+.low-power-mode .elephant-transition-enter-active::after,
+.low-power-mode .lion-transition-enter-active::before,
+.low-power-mode .vulture-transition-enter-active::before,
+.low-power-mode .antelope-transition-enter-active::after {
+  display: none !important;
+}
+
+/* Slow connection optimizations */
+.slow-connection .cheetah-transition-enter-active,
+.slow-connection .cheetah-transition-exit-active {
+  transition-duration: 0.15s !important;
+}
+
+.slow-connection .elephant-transition-enter-active,
+.slow-connection .elephant-transition-exit-active {
+  transition-duration: 0.3s !important;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .cheetah-transition-enter-active::before {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(0, 0, 0, 0.2) 50%,
+      transparent 100%
+    ) !important;
+  }
+
+  .lion-transition-enter-active::before {
+    border-color: rgba(0, 0, 0, 0.8) !important;
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .cheetah-transition-enter-active::before {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 25%,
+      rgba(255, 255, 255, 0.2) 50%,
+      rgba(255, 255, 255, 0.1) 75%,
+      transparent 100%
+    );
+  }
+
+  .elephant-transition-enter-active::after {
+    background: linear-gradient(
+      90deg,
+      rgba(200, 200, 200, 0.4) 0%,
+      rgba(200, 200, 200, 0.2) 50%,
+      rgba(200, 200, 200, 0.4) 100%
+    );
+  }
+
+  .lion-transition-enter-active::before {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .vulture-transition-enter-active::before {
+    border-color: rgba(200, 200, 200, 0.5);
+  }
+
+  .antelope-transition-enter-active::after {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(200, 200, 200, 0.4) 25%,
+      rgba(200, 200, 200, 0.6) 50%,
+      rgba(200, 200, 200, 0.4) 75%,
+      transparent 100%
+    );
+  }
+}
+
+/* Utility classes for dynamic application */
+.transition-cheetah {
+  animation-name: cheetah-sprint;
+}
+
+.transition-elephant {
+  animation-name: elephant-steps;
+}
+
+.transition-lion {
+  animation-name: lion-roar;
+}
+
+.transition-vulture {
+  animation-name: vulture-circle;
+}
+
+.transition-antelope {
+  animation-name: antelope-path;
+}
+
+/* Performance monitoring classes */
+.transition-performance-low .cheetah-transition-enter-active,
+.transition-performance-low .cheetah-transition-exit-active {
+  transition-duration: 0.1s !important;
+  transform: none !important;
+}
+
+.transition-performance-low .elephant-transition-enter-active,
+.transition-performance-low .elephant-transition-exit-active {
+  transition-duration: 0.2s !important;
+  transform: scale(1) !important;
+}
+
+/* Page-specific transition assignments */
+.page-home {
+  transition-class: "lion";
+}
+.page-products {
+  transition-class: "cheetah";
+}
+.page-dashboard {
+  transition-class: "baobab";
+}
+.page-suppliers {
+  transition-class: "elephant";
+}
+.page-retailers {
+  transition-class: "gazelle";
+}
+.page-error {
+  transition-class: "hyena";
+}
+.page-loading {
+  transition-class: "vulture";
+}
+.page-navigation {
+  transition-class: "antelope";
+}

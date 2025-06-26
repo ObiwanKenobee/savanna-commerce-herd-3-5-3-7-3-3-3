@@ -1,0 +1,137 @@
+# 🦁 Savanna Marketplace Prometheus Configuration
+# Wildlife-themed monitoring for East African infrastructure
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: "savanna-marketplace"
+    region: "kenya-east"
+    wildlife: "monitoring-pride"
+
+# 📊 Alerting Configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+
+# 🔔 Alert Rules
+rule_files:
+  - "alerts/*.yml"
+
+# 📈 Scrape Configurations
+scrape_configs:
+  # 🦁 Application Metrics
+  - job_name: "savanna-marketplace"
+    static_configs:
+      - targets: ["savanna-marketplace-service:8080"]
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    honor_labels: true
+    params:
+      "match[]":
+        - '{__name__=~"savanna_.*"}'
+        - '{__name__=~"http_.*"}'
+        - '{__name__=~"nodejs_.*"}'
+
+  # 🐘 Database Metrics (PostgreSQL)
+  - job_name: "postgres-exporter"
+    static_configs:
+      - targets: ["postgres-exporter:9187"]
+    scrape_interval: 30s
+
+  # 🦏 Redis Metrics (Caching)
+  - job_name: "redis-exporter"
+    static_configs:
+      - targets: ["redis-exporter:9121"]
+    scrape_interval: 30s
+
+  # 🦓 Nginx Metrics
+  - job_name: "nginx-exporter"
+    static_configs:
+      - targets: ["nginx-exporter:9113"]
+    scrape_interval: 30s
+
+  # 🌍 Node Exporter (System Metrics)
+  - job_name: "node-exporter"
+    static_configs:
+      - targets:
+          - "node-exporter-1:9100"
+          - "node-exporter-2:9100"
+          - "node-exporter-3:9100"
+    scrape_interval: 30s
+
+  # ☁️ Kubernetes Metrics
+  - job_name: "kubernetes-apiservers"
+    kubernetes_sd_configs:
+      - role: endpoints
+        namespaces:
+          names:
+            - default
+    scheme: https
+    tls_config:
+      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    relabel_configs:
+      - source_labels:
+          [
+            __meta_kubernetes_namespace,
+            __meta_kubernetes_service_name,
+            __meta_kubernetes_endpoint_port_name,
+          ]
+        action: keep
+        regex: default;kubernetes;https
+
+  # 📱 Custom Business Metrics
+  - job_name: "mpesa-metrics"
+    static_configs:
+      - targets: ["mpesa-exporter:8080"]
+    metrics_path: /mpesa-metrics
+    scrape_interval: 60s
+
+  - job_name: "ussd-metrics"
+    static_configs:
+      - targets: ["ussd-exporter:8080"]
+    metrics_path: /ussd-metrics
+    scrape_interval: 60s
+
+  # 🔍 Fraud Detection Metrics
+  - job_name: "vulture-watch"
+    static_configs:
+      - targets: ["fraud-detection-service:8080"]
+    metrics_path: /fraud-metrics
+    scrape_interval: 30s
+
+  # 💰 Dynamic Pricing Metrics
+  - job_name: "pricing-engine"
+    static_configs:
+      - targets: ["pricing-service:8080"]
+    metrics_path: /pricing-metrics
+    scrape_interval: 60s
+
+  # 📦 Inventory Sync Metrics
+  - job_name: "inventory-sync"
+    static_configs:
+      - targets: ["inventory-service:8080"]
+    metrics_path: /inventory-metrics
+    scrape_interval: 15s
+
+# 🏷️ Metric Relabeling
+metric_relabel_configs:
+  # Add wildlife labels
+  - source_labels: [__name__]
+    regex: "savanna_(.*)"
+    target_label: "wildlife_metric"
+    replacement: "true"
+
+  # Add region labels
+  - target_label: "region"
+    replacement: "kenya-east"
+
+# 🔧 Storage Configuration
+storage:
+  tsdb:
+    retention: "30d"
+    wal-compression: true

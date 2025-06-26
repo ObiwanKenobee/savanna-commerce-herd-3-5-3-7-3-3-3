@@ -1,0 +1,225 @@
+# AWS CloudFormation template for Savanna Marketplace
+# Optimized for free tier with upgrade path to production
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Savanna Marketplace - Scalable deployment with free tier optimization"
+
+Parameters:
+  Environment:
+    Type: String
+    Default: "staging"
+    AllowedValues: ["staging", "production"]
+    Description: "Deployment environment"
+
+  InstanceType:
+    Type: String
+    Default: "t2.micro" # Free tier eligible
+    AllowedValues: ["t2.micro", "t3.small", "t3.medium", "t3.large"]
+    Description: "EC2 instance type"
+
+Resources:
+  # S3 Bucket for static assets (free tier: 5GB)
+  StaticAssetsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "savanna-marketplace-assets-${Environment}"
+      PublicReadPolicy: true
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders: ["*"]
+            AllowedMethods: ["GET", "HEAD"]
+            AllowedOrigins: ["*"]
+            MaxAge: 86400
+
+  # CloudFront Distribution (free tier: 1TB data transfer)
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - DomainName: !GetAtt StaticAssetsBucket.DomainName
+            Id: S3Origin
+            S3OriginConfig:
+              OriginAccessIdentity: ""
+        Enabled: true
+        Comment: !Sub "Savanna Marketplace CDN - ${Environment}"
+        DefaultCacheBehavior:
+          TargetOriginId: S3Origin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods: ["GET", "HEAD", "OPTIONS"]
+          CachedMethods: ["GET", "HEAD"]
+          Compress: true
+          DefaultTTL: 86400
+          MaxTTL: 31536000
+        PriceClass: PriceClass_100 # Use only North America and Europe
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: true
+
+  # Elastic Beanstalk Application (free tier eligible)
+  Application:
+    Type: AWS::ElasticBeanstalk::Application
+    Properties:
+      ApplicationName: !Sub "savanna-marketplace-${Environment}"
+      Description: "Savanna Marketplace Application"
+
+  # Application Version
+  ApplicationVersion:
+    Type: AWS::ElasticBeanstalk::ApplicationVersion
+    Properties:
+      ApplicationName: !Ref Application
+      Description: "Initial version"
+      SourceBundle:
+        S3Bucket: !Ref StaticAssetsBucket
+        S3Key: "app-source.zip"
+
+  # Elastic Beanstalk Environment
+  Environment:
+    Type: AWS::ElasticBeanstalk::Environment
+    Properties:
+      ApplicationName: !Ref Application
+      EnvironmentName: !Sub "savanna-marketplace-env-${Environment}"
+      SolutionStackName: "64bit Amazon Linux 2 v5.8.0 running Node.js 18"
+      VersionLabel: !Ref ApplicationVersion
+      OptionSettings:
+        # Instance configuration (free tier)
+        - Namespace: aws:autoscaling:launchconfiguration
+          OptionName: InstanceType
+          Value: !Ref InstanceType
+        - Namespace: aws:autoscaling:launchconfiguration
+          OptionName: IamInstanceProfile
+          Value: aws-elasticbeanstalk-ec2-role
+
+        # Auto scaling (minimal for free tier)
+        - Namespace: aws:autoscaling:asg
+          OptionName: MinSize
+          Value: "1"
+        - Namespace: aws:autoscaling:asg
+          OptionName: MaxSize
+          Value: "2"
+
+        # Load balancer (application load balancer)
+        - Namespace: aws:elasticbeanstalk:environment
+          OptionName: EnvironmentType
+          Value: LoadBalanced
+        - Namespace: aws:elasticbeanstalk:environment
+          OptionName: LoadBalancerType
+          Value: application
+
+        # Health check
+        - Namespace: aws:elasticbeanstalk:healthreporting:system
+          OptionName: SystemType
+          Value: enhanced
+
+        # Environment variables
+        - Namespace: aws:elasticbeanstalk:application:environment
+          OptionName: NODE_ENV
+          Value: !Ref Environment
+        - Namespace: aws:elasticbeanstalk:application:environment
+          OptionName: VITE_APP_ENV
+          Value: !Ref Environment
+
+  # Lambda function for cron jobs (free tier: 1M requests/month)
+  CronFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub "savanna-marketplace-cron-${Environment}"
+      Runtime: nodejs18.x
+      Handler: index.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Timeout: 30
+      MemorySize: 128 # Minimum for cost optimization
+      Code:
+        ZipFile: |
+          exports.handler = async (event) => {
+            const fetch = require('node-fetch');
+            const baseUrl = process.env.APP_URL;
+            
+            try {
+              switch (event.task) {
+                case 'daily-analytics':
+                  await fetch(`${baseUrl}/api/cron/daily-analytics`);
+                  break;
+                case 'daily-reports':
+                  await fetch(`${baseUrl}/api/cron/daily-reports`);
+                  break;
+                case 'daily-cleanup':
+                  await fetch(`${baseUrl}/api/cron/daily-cleanup`);
+                  break;
+              }
+              return { statusCode: 200, body: 'Success' };
+            } catch (error) {
+              return { statusCode: 500, body: error.message };
+            }
+          };
+      Environment:
+        Variables:
+          APP_URL: !Sub "http://${Environment.EndpointURL}"
+
+  # IAM Role for Lambda
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+  # EventBridge Rules for daily cron jobs
+  DailyAnalyticsRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "Daily analytics cron job"
+      ScheduleExpression: "cron(0 2 * * ? *)"
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt CronFunction.Arn
+          Id: "DailyAnalyticsTarget"
+          Input: '{"task": "daily-analytics"}'
+
+  DailyReportsRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "Daily reports cron job"
+      ScheduleExpression: "cron(0 6 * * ? *)"
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt CronFunction.Arn
+          Id: "DailyReportsTarget"
+          Input: '{"task": "daily-reports"}'
+
+  DailyCleanupRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "Daily cleanup cron job"
+      ScheduleExpression: "cron(0 23 * * ? *)"
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt CronFunction.Arn
+          Id: "DailyCleanupTarget"
+          Input: '{"task": "daily-cleanup"}'
+
+Outputs:
+  ApplicationURL:
+    Description: "Application URL"
+    Value: !Sub "http://${Environment.EndpointURL}"
+    Export:
+      Name: !Sub "${AWS::StackName}-AppURL"
+
+  CloudFrontURL:
+    Description: "CloudFront Distribution URL"
+    Value: !GetAtt CloudFrontDistribution.DomainName
+    Export:
+      Name: !Sub "${AWS::StackName}-CDN"
+
+  S3BucketName:
+    Description: "S3 Bucket for static assets"
+    Value: !Ref StaticAssetsBucket
+    Export:
+      Name: !Sub "${AWS::StackName}-S3Bucket"

@@ -1,0 +1,498 @@
+/* 🌍 Digital Savanna - Maasai & Kenyan Cultural Styling */
+
+/* Maasai-inspired color palette */
+:root {
+  --savanna-terracotta: #e2725b;
+  --savanna-acacia: #2e8b57;
+  --savanna-gold: #ffd700;
+  --savanna-earth: #8b4513;
+  --savanna-sky: #87ceeb;
+  --savanna-sunset: #ff6b35;
+  --savanna-grass: #9acd32;
+  --savanna-night: #2c1810;
+}
+
+/* Lion paw button animation */
+@keyframes pawPress {
+  0% {
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 0 0px var(--savanna-gold));
+  }
+  25% {
+    transform: scale(0.95) rotate(-2deg);
+    filter: drop-shadow(0 0 5px var(--savanna-gold));
+  }
+  50% {
+    transform: scale(0.9) rotate(0deg);
+    filter: drop-shadow(0 0 10px var(--savanna-gold));
+  }
+  75% {
+    transform: scale(0.95) rotate(2deg);
+    filter: drop-shadow(0 0 15px var(--savanna-gold));
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    filter: drop-shadow(0 0 20px var(--savanna-gold));
+  }
+}
+
+@keyframes roarGlow {
+  0% {
+    box-shadow: 0 0 5px var(--savanna-gold);
+  }
+  50% {
+    box-shadow:
+      0 0 20px var(--savanna-gold),
+      0 0 30px var(--savanna-sunset);
+  }
+  100% {
+    box-shadow: 0 0 5px var(--savanna-gold);
+  }
+}
+
+.lion-paw-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.lion-paw-button:active {
+  animation: pawPress 0.6s ease-in-out;
+}
+
+.lion-paw-button:hover {
+  animation: roarGlow 1.5s infinite;
+}
+
+/* Baobab tree shake animation */
+@keyframes baobabShake {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  10% {
+    transform: translateX(-5px) rotate(-1deg);
+  }
+  20% {
+    transform: translateX(5px) rotate(1deg);
+  }
+  30% {
+    transform: translateX(-5px) rotate(-1deg);
+  }
+  40% {
+    transform: translateX(5px) rotate(1deg);
+  }
+  50% {
+    transform: translateX(-3px) rotate(-0.5deg);
+  }
+  60% {
+    transform: translateX(3px) rotate(0.5deg);
+  }
+  70% {
+    transform: translateX(-3px) rotate(-0.5deg);
+  }
+  80% {
+    transform: translateX(3px) rotate(0.5deg);
+  }
+  90% {
+    transform: translateX(-1px) rotate(-0.2deg);
+  }
+}
+
+.baobab-shake {
+  animation: baobabShake 1s ease-in-out;
+}
+
+/* Flying birds animation */
+@keyframes birdsFlying {
+  0% {
+    transform: translateX(-100vw) translateY(0px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100vw) translateY(-20px);
+    opacity: 0;
+  }
+}
+
+.flying-birds {
+  animation: birdsFlying 15s linear infinite;
+  position: absolute;
+  top: 10%;
+  left: 0;
+  font-size: 1.5rem;
+  z-index: 5;
+}
+
+/* Cheetah speed indicator */
+@keyframes cheetahSpeed {
+  0% {
+    transform: translateX(-5px);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateX(5px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-5px);
+    opacity: 0.7;
+  }
+}
+
+.cheetah-speed {
+  animation: cheetahSpeed 0.8s ease-in-out infinite;
+}
+
+/* Elephant herd progress animation */
+@keyframes elephantMarch {
+  0%,
+  100% {
+    transform: translateX(0px);
+  }
+  25% {
+    transform: translateX(2px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+}
+
+.elephant-march {
+  animation: elephantMarch 2s ease-in-out infinite;
+}
+
+/* Maasai bead pattern for price tags */
+.maasai-bead-pattern {
+  background: linear-gradient(
+    45deg,
+    var(--savanna-terracotta) 0%,
+    var(--savanna-gold) 25%,
+    var(--savanna-terracotta) 50%,
+    var(--savanna-gold) 75%,
+    var(--savanna-terracotta) 100%
+  );
+  background-size: 8px 8px;
+  position: relative;
+}
+
+.maasai-bead-pattern::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    rgba(255, 255, 255, 0.1) 2px,
+    transparent 4px
+  );
+}
+
+/* Animal print borders */
+.zebra-border {
+  border-image: repeating-linear-gradient(
+      45deg,
+      #000 0px,
+      #000 4px,
+      #fff 4px,
+      #fff 8px,
+      #000 8px,
+      #000 12px
+    )
+    1;
+  border-width: 2px;
+  border-style: solid;
+}
+
+.giraffe-border {
+  border-image: repeating-conic-gradient(
+      from 0deg,
+      var(--savanna-earth) 0deg,
+      var(--savanna-gold) 30deg,
+      var(--savanna-earth) 60deg
+    )
+    1;
+  border-width: 3px;
+  border-style: solid;
+}
+
+/* Rhino certification stamp */
+@keyframes rhinoStamp {
+  0% {
+    transform: scale(0.8) rotate(-5deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.rhino-stamp {
+  animation: rhinoStamp 0.8s ease-out;
+}
+
+/* Savanna time-of-day gradients */
+.savanna-dawn {
+  background: linear-gradient(
+    135deg,
+    #ff6b35 0%,
+    /* Sunrise orange */ #ff8e53 25%,
+    /* Warm orange */ #ffd700 50%,
+    /* Golden */ #87ceeb 75%,
+    /* Sky blue */ #98fb98 100% /* Light green */
+  );
+}
+
+.savanna-midday {
+  background: linear-gradient(
+    135deg,
+    #87ceeb 0%,
+    /* Sky blue */ #98fb98 25%,
+    /* Light green */ #90ee90 50%,
+    /* Grass green */ #f0e68c 75%,
+    /* Khaki */ #deb887 100% /* Burlywood */
+  );
+}
+
+.savanna-dusk {
+  background: linear-gradient(
+    135deg,
+    #ff4500 0%,
+    /* Red orange */ #ff6347 25%,
+    /* Tomato */ #ffd700 50%,
+    /* Gold */ #ff1493 75%,
+    /* Deep pink */ #4b0082 100% /* Indigo */
+  );
+}
+
+.savanna-night {
+  background: linear-gradient(
+    135deg,
+    #191970 0%,
+    /* Midnight blue */ #000080 25%,
+    /* Navy */ #4b0082 50%,
+    /* Indigo */ #2f4f4f 75%,
+    /* Dark slate gray */ #000000 100% /* Black */
+  );
+}
+
+/* Watering hole ripple effect */
+@keyframes wateringHoleRipple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.watering-hole-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.watering-hole-ripple::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  background: rgba(135, 206, 235, 0.6);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: wateringHoleRipple 2s infinite;
+}
+
+/* Pride level indicators */
+.pride-alpha {
+  background: linear-gradient(45deg, var(--savanna-gold), #ffa500);
+  background-size: 200% 200%;
+  animation: prideGlow 3s ease-in-out infinite;
+}
+
+.pride-lion {
+  background: linear-gradient(45deg, var(--savanna-terracotta), #ff7f50);
+  background-size: 200% 200%;
+  animation: prideGlow 3s ease-in-out infinite;
+}
+
+.pride-cub {
+  background: linear-gradient(45deg, #ffb6c1, #ffc0cb);
+  background-size: 200% 200%;
+  animation: prideGlow 3s ease-in-out infinite;
+}
+
+@keyframes prideGlow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Swahili wisdom text styling */
+.swahili-wisdom {
+  font-family: "Courier New", monospace;
+  font-style: italic;
+  color: var(--savanna-earth);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.swahili-wisdom::before {
+  content: '"';
+  font-size: 1.5em;
+  color: var(--savanna-terracotta);
+  position: absolute;
+  left: -10px;
+  top: -5px;
+}
+
+.swahili-wisdom::after {
+  content: '"';
+  font-size: 1.5em;
+  color: var(--savanna-terracotta);
+  position: absolute;
+  right: -10px;
+  bottom: -10px;
+}
+
+/* Urgency indicators with Kenyan flag colors */
+.urgency-high {
+  border-left: 4px solid #000000; /* Black from Kenyan flag */
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.05) 0%, transparent 100%);
+}
+
+.urgency-medium {
+  border-left: 4px solid #ff0000; /* Red from Kenyan flag */
+  background: linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.05) 0%,
+    transparent 100%
+  );
+}
+
+.urgency-low {
+  border-left: 4px solid #00ff00; /* Green from Kenyan flag */
+  background: linear-gradient(
+    90deg,
+    rgba(0, 255, 0, 0.05) 0%,
+    transparent 100%
+  );
+}
+
+/* AR Mode styling */
+.ar-overlay {
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.ar-stall {
+  background: linear-gradient(
+    135deg,
+    rgba(46, 139, 87, 0.9),
+    rgba(226, 114, 91, 0.9)
+  );
+  border-radius: 15px;
+  border: 2px solid var(--savanna-gold);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Trail indicators */
+.trail-cheetah {
+  background: linear-gradient(45deg, #ffd700, #ffa500);
+  border: 2px solid #ff8c00;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.trail-elephant {
+  background: linear-gradient(45deg, #696969, #a9a9a9);
+  border: 2px solid #808080;
+  box-shadow: 0 0 10px rgba(105, 105, 105, 0.5);
+}
+
+.trail-vulture {
+  background: linear-gradient(45deg, #8b0000, #dc143c);
+  border: 2px solid #b22222;
+  box-shadow: 0 0 10px rgba(139, 0, 0, 0.5);
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+  .lion-paw-button {
+    min-height: 48px;
+    font-size: 0.9rem;
+  }
+
+  .flying-birds {
+    font-size: 1rem;
+    animation-duration: 10s;
+  }
+
+  .maasai-bead-pattern {
+    background-size: 6px 6px;
+  }
+
+  .swahili-wisdom {
+    font-size: 0.8rem;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .lion-paw-button:active,
+  .baobab-shake,
+  .flying-birds,
+  .cheetah-speed,
+  .elephant-march,
+  .rhinoStamp,
+  .watering-hole-ripple::before,
+  .pride-alpha,
+  .pride-lion,
+  .pride-cub {
+    animation: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  :root {
+    --savanna-terracotta: #8b0000;
+    --savanna-acacia: #006400;
+    --savanna-gold: #ffd700;
+    --savanna-earth: #000000;
+  }
+}
+
+/* Print styles */
+@media print {
+  .flying-birds,
+  .ar-overlay,
+  .watering-hole-ripple::before {
+    display: none;
+  }
+
+  .savanna-dawn,
+  .savanna-midday,
+  .savanna-dusk,
+  .savanna-night {
+    background: white !important;
+    color: black !important;
+  }
+}

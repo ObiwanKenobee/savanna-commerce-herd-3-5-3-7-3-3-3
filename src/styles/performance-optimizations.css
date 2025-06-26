@@ -1,0 +1,548 @@
+/* 🚀 Performance Optimizations for Kenya's Digital Savannah */
+
+/* Base performance optimizations */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reduce motion for accessibility and performance */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Battery-aware optimizations */
+.low-power-mode * {
+  animation: none !important;
+  transition-duration: 0.1s !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+.critical-battery {
+  filter: grayscale(0.5) brightness(0.8);
+}
+
+.very-low-battery {
+  filter: grayscale(0.8) brightness(0.6);
+}
+
+/* Network-aware optimizations */
+.slow-connection .skeleton-shimmer,
+.skeleton-2g .skeleton-shimmer {
+  animation-duration: 4s !important;
+  background: linear-gradient(90deg, #f0f0f0 50%, #e8e8e8 50%) !important;
+  background-size: 100% 100% !important;
+}
+
+.slow-connection img {
+  image-rendering: optimizeSpeed;
+}
+
+.slow-connection video {
+  preload: none;
+}
+
+/* 2G specific optimizations */
+.connection-2g * {
+  animation: none !important;
+  transition: none !important;
+}
+
+.connection-2g img {
+  loading: lazy;
+  image-rendering: pixelated;
+}
+
+/* Adaptive loading states */
+.loading-cheetah {
+  animation: cheetah-pulse 0.8s infinite;
+}
+
+.loading-elephant {
+  animation: elephant-sway 2s infinite;
+}
+
+.loading-tortoise {
+  animation: tortoise-crawl 3s infinite;
+}
+
+@keyframes cheetah-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes elephant-sway {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  75% {
+    transform: translateX(2px);
+  }
+}
+
+@keyframes tortoise-crawl {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Image optimization classes */
+.image-low-quality {
+  image-rendering: optimizeSpeed;
+  filter: blur(0.5px);
+}
+
+.image-medium-quality {
+  image-rendering: auto;
+}
+
+.image-high-quality {
+  image-rendering: optimizeQuality;
+}
+
+/* Lazy loading placeholders */
+.lazy-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Voice command indicators */
+.voice-active {
+  border: 2px solid #4caf50;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+  animation: voice-pulse 1s infinite;
+}
+
+@keyframes voice-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+  }
+}
+
+/* USSD fallback styling */
+.ussd-fallback-visible {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background: linear-gradient(135deg, #2d5016 0%, #4a7c59 100%) !important;
+  color: white !important;
+  z-index: 9999 !important;
+  display: block !important;
+  overflow-y: auto !important;
+}
+
+/* No-JS fallbacks */
+.no-js .js-only {
+  display: none !important;
+}
+
+.no-js .no-js-only {
+  display: block !important;
+}
+
+/* Progressive enhancement markers */
+.js-enhanced {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.js-loaded .js-enhanced {
+  opacity: 1;
+}
+
+/* Prefetch indicators */
+.prefetching {
+  position: relative;
+}
+
+.prefetching::after {
+  content: "⚡";
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 0.8rem;
+  background: #4caf50;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: prefetch-pulse 2s infinite;
+}
+
+@keyframes prefetch-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+/* Location-specific optimizations */
+.urban-bundle {
+  --animation-speed: 1;
+  --image-quality: high;
+  --prefetch-enabled: true;
+}
+
+.rural-bundle {
+  --animation-speed: 0.5;
+  --image-quality: medium;
+  --prefetch-enabled: false;
+}
+
+.basic-bundle {
+  --animation-speed: 0;
+  --image-quality: low;
+  --prefetch-enabled: false;
+}
+
+/* Touch-friendly enhancements for mobile */
+@media (hover: none) and (pointer: coarse) {
+  button,
+  .clickable {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem;
+  }
+
+  .touch-friendly {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .skeleton-shimmer {
+    background: repeating-linear-gradient(
+      45deg,
+      #000,
+      #000 10px,
+      #fff 10px,
+      #fff 20px
+    ) !important;
+  }
+
+  .voice-active {
+    border-color: #000 !important;
+    box-shadow: 0 0 0 3px #fff !important;
+  }
+}
+
+/* Dark mode adaptations */
+@media (prefers-color-scheme: dark) {
+  .skeleton-shimmer {
+    background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+  }
+
+  .lazy-loading {
+    background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+  }
+
+  .prefetching::after {
+    background: #2d5016;
+  }
+}
+
+/* Print optimizations */
+@media print {
+  .no-print,
+  .voice-controls,
+  .battery-indicator,
+  .transition-overlay {
+    display: none !important;
+  }
+
+  * {
+    animation: none !important;
+    transition: none !important;
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* Performance monitoring utilities */
+.performance-low .expensive-animation {
+  animation: none !important;
+}
+
+.performance-medium .heavy-effects {
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+.performance-high .all-effects {
+  /* Enable all effects */
+}
+
+/* Intersection observer utilities */
+.fade-in-observed {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+
+.fade-in-observed.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Reduced motion for fade-in */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in-observed {
+    transform: none !important;
+    transition: opacity 0.2s ease !important;
+  }
+}
+
+/* Kenya-specific time-based styles */
+.morning-mode {
+  filter: sepia(0.1) brightness(1.1);
+}
+
+.midday-mode {
+  filter: brightness(1.2) saturate(1.1);
+}
+
+.evening-mode {
+  filter: sepia(0.2) brightness(0.9);
+}
+
+.night-mode {
+  filter: sepia(0.3) brightness(0.7);
+}
+
+/* Emergency low-bandwidth mode */
+.emergency-mode * {
+  animation: none !important;
+  transition: none !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+.emergency-mode img {
+  display: none;
+}
+
+.emergency-mode img[alt]::after {
+  content: attr(alt);
+  display: block;
+  padding: 1rem;
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+/* Haptic feedback indicators */
+.haptic-feedback {
+  position: relative;
+}
+
+.haptic-feedback.vibrating::before {
+  content: "📳";
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 0.8rem;
+  animation: vibrate-icon 0.3s ease;
+}
+
+@keyframes vibrate-icon {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  75% {
+    transform: translateX(2px);
+  }
+}
+
+/* Optimized scrolling */
+.smooth-scroll {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Memory-efficient selectors */
+.efficient-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  contain: layout style;
+}
+
+.efficient-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  contain: layout style;
+}
+
+/* Content containment for performance */
+.performance-container {
+  contain: layout style paint;
+}
+
+.isolated-component {
+  contain: strict;
+}
+
+/* GPU acceleration utilities */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.gpu-accelerated-scroll {
+  transform: translateZ(0);
+  will-change: scroll-position;
+}
+
+/* Cleanup will-change after animations */
+.animation-complete {
+  will-change: auto;
+}
+
+/* Responsive image containers */
+.responsive-image-container {
+  position: relative;
+  overflow: hidden;
+  contain: layout;
+}
+
+.responsive-image-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Efficient text rendering */
+.optimized-text {
+  text-rendering: optimizeSpeed;
+  font-display: swap;
+}
+
+.quality-text {
+  text-rendering: optimizeLegibility;
+  font-display: block;
+}
+
+/* Service worker update notification */
+.sw-update-available {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2d5016;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  animation: slide-up 0.3s ease;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateX(-50%) translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Critical CSS loading state */
+.critical-css-loading {
+  display: none;
+}
+
+.critical-css-loaded .critical-css-loading {
+  display: block;
+}
+
+/* Bandwidth monitoring indicator */
+.bandwidth-indicator {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.bandwidth-indicator.visible {
+  opacity: 1;
+}
+
+.bandwidth-slow-2g::after {
+  content: " 2G";
+  color: #ff5722;
+}
+.bandwidth-2g::after {
+  content: " 2G";
+  color: #ff5722;
+}
+.bandwidth-3g::after {
+  content: " 3G";
+  color: #ff9800;
+}
+.bandwidth-4g::after {
+  content: " 4G";
+  color: #4caf50;
+}
+.bandwidth-wifi::after {
+  content: " WiFi";
+  color: #2196f3;
+}

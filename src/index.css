@@ -1,0 +1,544 @@
+@import "./styles/performance-optimizations.css";
+@import "./styles/responsive.css";
+@import "./styles/digital-savanna.css";
+@import "./styles/neo-savannah.css";
+@import "./components/wildlife/skeleton-animations.css";
+@import "./styles/wildlife-transitions.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom responsive breakpoints for navigation */
+@layer utilities {
+  .xs\:block {
+    @media (min-width: 475px) {
+      display: block;
+    }
+  }
+
+  .xs\:w-\[320px\] {
+    @media (min-width: 475px) {
+      width: 320px;
+    }
+  }
+}
+
+/* Digital Savannah Design System */
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 145 50% 25%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 145 50% 25%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 145 50% 25%;
+
+    /* Savanna Primary Colors */
+    --primary: 145 50% 35%; /* Deep Green */
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 11 65% 62%; /* Terracotta */
+    --secondary-foreground: 0 0% 98%;
+
+    /* Accent Colors */
+    --accent: 51 100% 50%; /* Gold */
+    --accent-foreground: 145 50% 25%;
+
+    --sky-blue: 203 92% 75%; /* Sky Blue */
+
+    --muted: 145 20% 96%;
+    --muted-foreground: 145 20% 45%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 145 20% 90%;
+    --input: 145 20% 90%;
+    --ring: 145 50% 35%;
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 145 30% 8%;
+    --foreground: 145 20% 95%;
+    --card: 145 30% 10%;
+    --card-foreground: 145 20% 95%;
+    --popover: 145 30% 10%;
+    --popover-foreground: 145 20% 95%;
+    --primary: 145 50% 45%;
+    --primary-foreground: 145 30% 8%;
+    --secondary: 11 65% 55%;
+    --secondary-foreground: 145 30% 8%;
+    --muted: 145 30% 15%;
+    --muted-foreground: 145 20% 65%;
+    --accent: 51 100% 60%;
+    --accent-foreground: 145 30% 8%;
+    --border: 145 30% 18%;
+    --input: 145 30% 18%;
+    --ring: 145 50% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body,
+  #root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(
+        circle at 20% 80%,
+        rgba(46, 139, 87, 0.03) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 20%,
+        rgba(226, 114, 91, 0.03) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 40% 40%,
+        rgba(255, 215, 0, 0.02) 0%,
+        transparent 50%
+      );
+  }
+
+  .app-container {
+    width: 100vw;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  .page-container {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Full-width layout utilities */
+  .full-width {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+  }
+
+  .edge-to-edge {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .responsive-container {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .responsive-container {
+      padding: 0 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .responsive-container {
+      padding: 0 3rem;
+    }
+  }
+}
+
+/* Enhanced Savanna-themed animations */
+@keyframes savanna-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes migration {
+  0% {
+    transform: translateX(-100%) rotateY(0deg);
+  }
+  25% {
+    transform: translateX(25vw) rotateY(180deg);
+  }
+  50% {
+    transform: translateX(50vw) rotateY(0deg);
+  }
+  75% {
+    transform: translateX(75vw) rotateY(180deg);
+  }
+  100% {
+    transform: translateX(120vw) rotateY(0deg);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+  66% {
+    transform: translateY(-4px) rotate(-1deg);
+  }
+}
+
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(-2deg) scale(1);
+  }
+  50% {
+    transform: rotate(2deg) scale(1.02);
+  }
+}
+
+@keyframes stampede {
+  0% {
+    transform: translateX(0);
+  }
+  10% {
+    transform: translateX(-5px);
+  }
+  20% {
+    transform: translateX(5px);
+  }
+  30% {
+    transform: translateX(-5px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  50% {
+    transform: translateX(-3px);
+  }
+  60% {
+    transform: translateX(3px);
+  }
+  70% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+  90% {
+    transform: translateX(-1px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes waterhole-fill {
+  0% {
+    height: 0%;
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    height: 100%;
+    opacity: 1;
+  }
+}
+
+@keyframes paw-print {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.2) rotate(180deg);
+  }
+  100% {
+    opacity: 0.3;
+    transform: scale(1) rotate(360deg);
+  }
+}
+
+@keyframes hunt-stalk {
+  0%,
+  100% {
+    transform: translateX(0) scaleX(1);
+  }
+  25% {
+    transform: translateX(2px) scaleX(1.1);
+  }
+  75% {
+    transform: translateX(-2px) scaleX(0.9);
+  }
+}
+
+@keyframes roar-shake {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(-1deg);
+  }
+  20% {
+    transform: rotate(1deg);
+  }
+  30% {
+    transform: rotate(-1deg);
+  }
+  40% {
+    transform: rotate(1deg);
+  }
+  50% {
+    transform: rotate(-1deg);
+  }
+  60% {
+    transform: rotate(1deg);
+  }
+  70% {
+    transform: rotate(-1deg);
+  }
+  80% {
+    transform: rotate(1deg);
+  }
+  90% {
+    transform: rotate(-1deg);
+  }
+}
+
+/* Animation classes */
+.savanna-pulse {
+  animation: savanna-pulse 3s ease-in-out infinite;
+}
+
+.migration-animation {
+  animation: migration 25s linear infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-sway {
+  animation: sway 4s ease-in-out infinite;
+}
+
+.animate-stampede {
+  animation: stampede 0.8s ease-in-out;
+}
+
+.animate-waterhole-fill {
+  animation: waterhole-fill 2s ease-out forwards;
+}
+
+.animate-paw-print {
+  animation: paw-print 1.5s ease-out forwards;
+}
+
+.animate-hunt-stalk {
+  animation: hunt-stalk 2s ease-in-out infinite;
+}
+
+.animate-roar {
+  animation: roar-shake 0.6s ease-in-out;
+}
+
+/* Enhanced watercolor texture effects */
+.watercolor-bg {
+  background-image:
+    radial-gradient(
+      circle at 25% 25%,
+      rgba(255, 215, 0, 0.08) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      circle at 75% 75%,
+      rgba(135, 206, 235, 0.08) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      circle at 50% 10%,
+      rgba(46, 139, 87, 0.05) 0%,
+      transparent 70%
+    );
+}
+
+/* Savannah gradient backgrounds */
+.savannah-dawn {
+  background: linear-gradient(135deg, #ff6b35 0%, #f7b801 50%, #4ecdc4 100%);
+}
+
+.savannah-midday {
+  background: linear-gradient(135deg, #2e8b57 0%, #e2725b 50%, #ffd700 100%);
+}
+
+.savannah-dusk {
+  background: linear-gradient(135deg, #8b4513 0%, #cd853f 50%, #ff4500 100%);
+}
+
+.savannah-night {
+  background: linear-gradient(135deg, #2f4f4f 0%, #696969 50%, #f0e68c 100%);
+}
+
+/* Pride Points glow effect */
+.pride-glow {
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+/* Watering hole ripple effect */
+.waterhole-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.waterhole-ripple::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(135, 206, 235, 0.3);
+  transform: translate(-50%, -50%);
+  animation: ripple 2s infinite;
+}
+
+@keyframes ripple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 200px;
+    height: 200px;
+    opacity: 0;
+  }
+}
+
+/* Hover effects for wildlife cards */
+.wildlife-card {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.wildlife-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.6s ease;
+}
+
+.wildlife-card:hover::before {
+  left: 100%;
+}
+
+.wildlife-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(46, 139, 87, 0.15);
+}
+
+/* Loading spinner with wildlife theme */
+.savanna-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e5e7eb;
+  border-top: 3px solid #059669;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive text sizing for mobile */
+@media (max-width: 640px) {
+  .text-responsive-xl {
+    font-size: 2rem;
+    line-height: 2.5rem;
+  }
+
+  .text-responsive-2xl {
+    font-size: 2.5rem;
+    line-height: 3rem;
+  }
+}
+
+/* Custom scrollbar with savanna theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #059669;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #047857;
+}
+
+/* Focus states for accessibility */
+.focus-savanna:focus {
+  outline: 2px solid #059669;
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none;
+  }
+
+  body {
+    background: white !important;
+  }
+}

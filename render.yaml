@@ -1,0 +1,58 @@
+services:
+  - type: web
+    name: savanna-marketplace-web
+    env: node
+    region: oregon # Closest to Africa with good performance
+    plan: free # Can be upgraded to starter/standard
+    buildCommand: npm install && npm run build
+    startCommand: npx serve -s dist -l 10000
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: VITE_APP_ENV
+        value: production
+      - key: VITE_APP_URL
+        fromService:
+          type: web
+          name: savanna-marketplace-web
+          property: host
+    # Auto-scaling configuration
+    autoDeploy: true
+    branch: main
+    # Health check
+    healthCheckPath: /
+    # Resource limits for free tier
+    disk:
+      name: savanna-marketplace-disk
+      size: 1GB
+    # Cron jobs (daily for free tier)
+    cronJobs:
+      - name: daily-analytics
+        schedule: "0 2 * * *"
+        command: "curl $RENDER_EXTERNAL_URL/api/cron/daily-analytics"
+      - name: daily-reports
+        schedule: "0 6 * * *"
+        command: "curl $RENDER_EXTERNAL_URL/api/cron/daily-reports"
+      - name: daily-cleanup
+        schedule: "0 23 * * *"
+        command: "curl $RENDER_EXTERNAL_URL/api/cron/daily-cleanup"
+
+  # Optional: Separate API service (can be added when upgrading)
+  # - type: web
+  #   name: savanna-marketplace-api
+  #   env: node
+  #   region: oregon
+  #   plan: free
+  #   buildCommand: npm install
+  #   startCommand: npm run start:api
+  #   envVars:
+  #     - key: NODE_ENV
+  #       value: production
+# Optional: Database service (can be added when upgrading)
+# databases:
+#   - name: savanna-marketplace-db
+#     databaseName: savanna_marketplace
+#     user: savanna_admin
+#     region: oregon
+#     plan: free
+#     version: "15"

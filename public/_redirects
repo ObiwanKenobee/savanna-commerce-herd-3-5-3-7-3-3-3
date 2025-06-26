@@ -1,0 +1,15 @@
+# Redirects for Netlify/Vercel SPA routing
+/*    /index.html   200
+
+# Enterprise dashboard redirects
+/dashboard/retailer/*  /index.html  200
+/dashboard/supplier/*  /index.html  200
+/dashboard/logistics/* /index.html  200
+/admin/*              /index.html  200
+/watering-holes/*     /index.html  200
+/herd-directory/*     /index.html  200
+/swift-retailers/*    /index.html  200
+/pack-stories/*       /index.html  200
+
+# API fallback
+/api/*                /index.html  404

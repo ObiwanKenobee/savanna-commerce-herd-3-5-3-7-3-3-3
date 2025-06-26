@@ -1,0 +1,600 @@
+/* 🦴 Wildlife Skeleton Animations - Kenya-Optimized */
+
+/* Base skeleton shimmer effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+    opacity: 0.3;
+  }
+  40% {
+    background-position: 200px 0;
+    opacity: 0.7;
+  }
+  100% {
+    background-position: 200px 0;
+    opacity: 0.3;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0.3;
+  }
+}
+
+/* Reduced motion for low-bandwidth scenarios */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer {
+    animation: pulse 2s infinite !important;
+  }
+}
+
+/* Base skeleton styling */
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  background-repeat: no-repeat;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+/* Speed variants for different loading priorities */
+.cheetah-speed .skeleton-shimmer {
+  animation-duration: 0.8s; /* Fast like a cheetah */
+}
+
+.elephant-speed .skeleton-shimmer {
+  animation-duration: 2s; /* Steady like an elephant */
+}
+
+.tortoise-speed .skeleton-shimmer {
+  animation-duration: 3s; /* Slow like a tortoise */
+}
+
+/* Acacia Tree Skeleton */
+.acacia-skeleton {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.acacia-trunk {
+  width: 20%;
+  height: 40%;
+  background-color: #8b4513;
+  border-radius: 0 0 4px 4px;
+  margin-bottom: 4px;
+}
+
+.acacia-canopy {
+  width: 80%;
+  height: 50%;
+  background-color: #228b22;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  position: relative;
+}
+
+.acacia-branches {
+  position: absolute;
+  top: 60%;
+  width: 100%;
+  height: 20%;
+}
+
+.acacia-branches .branch {
+  position: absolute;
+  width: 30%;
+  height: 3px;
+  background-color: #8b4513;
+  border-radius: 2px;
+}
+
+.acacia-branches .branch:nth-child(1) {
+  left: 20%;
+  top: 0;
+  transform: rotate(-30deg);
+}
+
+.acacia-branches .branch:nth-child(2) {
+  right: 20%;
+  top: 0;
+  transform: rotate(30deg);
+}
+
+.acacia-branches .branch:nth-child(3) {
+  left: 35%;
+  top: 50%;
+  transform: rotate(-15deg);
+}
+
+/* Paw Print Skeleton */
+.paw-skeleton {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.paw-pad {
+  width: 60%;
+  height: 60%;
+  background-color: #8b4513;
+  border-radius: 50%;
+}
+
+.paw-toes {
+  display: flex;
+  justify-content: space-around;
+  width: 80%;
+  margin-top: 2px;
+}
+
+.paw-toes .toe {
+  width: 15%;
+  height: 15px;
+  background-color: #8b4513;
+  border-radius: 50%;
+}
+
+/* Elephant Skeleton */
+.elephant-skeleton {
+  position: relative;
+}
+
+.elephant-body {
+  width: 70%;
+  height: 60%;
+  background-color: #a9a9a9;
+  border-radius: 20px;
+  position: absolute;
+  left: 15%;
+  top: 20%;
+}
+
+.elephant-head {
+  width: 40%;
+  height: 50%;
+  background-color: #a9a9a9;
+  border-radius: 50%;
+  position: absolute;
+  left: 45%;
+  top: 10%;
+}
+
+.elephant-trunk {
+  width: 15%;
+  height: 40%;
+  background-color: #a9a9a9;
+  border-radius: 20px;
+  position: absolute;
+  left: 70%;
+  top: 30%;
+  transform: rotate(20deg);
+}
+
+.elephant-legs {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 25%;
+  display: flex;
+  justify-content: space-around;
+  padding: 0 15%;
+}
+
+.elephant-legs .leg {
+  width: 12%;
+  height: 100%;
+  background-color: #a9a9a9;
+  border-radius: 0 0 8px 8px;
+}
+
+/* Cheetah Skeleton */
+.cheetah-skeleton {
+  position: relative;
+}
+
+.cheetah-body {
+  width: 60%;
+  height: 50%;
+  background-color: #daa520;
+  border-radius: 15px;
+  position: absolute;
+  left: 10%;
+  top: 25%;
+}
+
+.cheetah-head {
+  width: 25%;
+  height: 40%;
+  background-color: #daa520;
+  border-radius: 50%;
+  position: absolute;
+  right: 10%;
+  top: 15%;
+}
+
+.cheetah-tail {
+  width: 8%;
+  height: 60%;
+  background-color: #daa520;
+  border-radius: 20px;
+  position: absolute;
+  left: 5%;
+  top: 10%;
+  transform: rotate(-30deg);
+}
+
+.cheetah-spots {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.cheetah-spots .spot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #8b4513;
+  border-radius: 50%;
+}
+
+.cheetah-spots .spot:nth-child(1) {
+  left: 20%;
+  top: 30%;
+}
+.cheetah-spots .spot:nth-child(2) {
+  left: 35%;
+  top: 40%;
+}
+.cheetah-spots .spot:nth-child(3) {
+  left: 50%;
+  top: 35%;
+}
+.cheetah-spots .spot:nth-child(4) {
+  left: 25%;
+  top: 50%;
+}
+
+/* Hyena Skeleton */
+.hyena-skeleton {
+  position: relative;
+}
+
+.hyena-body {
+  width: 65%;
+  height: 55%;
+  background-color: #8b7d6b;
+  border-radius: 15px;
+  position: absolute;
+  left: 10%;
+  top: 30%;
+}
+
+.hyena-head {
+  width: 30%;
+  height: 45%;
+  background-color: #8b7d6b;
+  border-radius: 50% 50% 30% 30%;
+  position: absolute;
+  right: 15%;
+  top: 15%;
+}
+
+.hyena-ears {
+  position: absolute;
+  top: 10%;
+  right: 15%;
+  width: 30%;
+  height: 20%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.hyena-ears .ear {
+  width: 40%;
+  height: 100%;
+  background-color: #8b7d6b;
+  border-radius: 50% 50% 0 0;
+}
+
+.hyena-tail {
+  width: 6%;
+  height: 40%;
+  background-color: #8b7d6b;
+  border-radius: 20px;
+  position: absolute;
+  left: 8%;
+  top: 35%;
+  transform: rotate(45deg);
+}
+
+/* Baobab Tree Skeleton */
+.baobab-skeleton {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.baobab-trunk {
+  width: 40%;
+  height: 60%;
+  background-color: #8b4513;
+  border-radius: 15px;
+}
+
+.baobab-crown {
+  width: 80%;
+  height: 25%;
+  background-color: #228b22;
+  border-radius: 20px;
+  margin-bottom: 5%;
+}
+
+.baobab-roots {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 15%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.baobab-roots .root {
+  width: 25%;
+  height: 100%;
+  background-color: #8b4513;
+  border-radius: 0 0 20px 20px;
+  transform-origin: top center;
+}
+
+.baobab-roots .root:nth-child(1) {
+  transform: rotate(-20deg);
+}
+.baobab-roots .root:nth-child(2) {
+  transform: rotate(0deg);
+}
+.baobab-roots .root:nth-child(3) {
+  transform: rotate(20deg);
+}
+
+/* Lion Mane Skeleton */
+.lion-skeleton {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lion-face {
+  width: 60%;
+  height: 60%;
+  background-color: #cd853f;
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+}
+
+.lion-mane {
+  width: 100%;
+  height: 100%;
+  background-color: #8b4513;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 1;
+}
+
+.lion-eyes {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%;
+  height: 15%;
+  display: flex;
+  justify-content: space-between;
+  z-index: 3;
+}
+
+.lion-eyes .eye {
+  width: 30%;
+  height: 100%;
+  background-color: #000;
+  border-radius: 50%;
+}
+
+.lion-nose {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 15%;
+  height: 10%;
+  background-color: #000;
+  border-radius: 50%;
+  z-index: 3;
+}
+
+/* Antelope Track Skeleton */
+.antelope-track-skeleton {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.track-path {
+  width: 100%;
+  height: 6px;
+  background-color: #8b7d6b;
+  border-radius: 3px;
+  position: relative;
+}
+
+.hoof-prints {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.hoof-prints .print {
+  width: 12px;
+  height: 16px;
+  background-color: #8b4513;
+  border-radius: 50% 50% 0 0;
+  transform: rotate(-15deg);
+}
+
+.hoof-prints .print:nth-child(even) {
+  transform: rotate(15deg) translateY(-8px);
+}
+
+/* Product Card Skeleton */
+.product-card-skeleton {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.product-image-skeleton {
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.product-info-skeleton {
+  space-y: 0.5rem;
+}
+
+.skeleton-line {
+  border-radius: 4px;
+}
+
+.price-skeleton {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0;
+}
+
+.description-skeleton {
+  margin-top: 0.5rem;
+}
+
+/* Navigation Skeleton */
+.navigation-skeleton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.nav-brand-skeleton {
+  display: flex;
+  align-items: center;
+}
+
+.nav-items-skeleton {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-item-skeleton {
+  display: flex;
+  align-items: center;
+}
+
+/* Dashboard Stats Skeleton */
+.dashboard-stats-skeleton {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.stat-card-skeleton {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stat-info {
+  margin-left: 1rem;
+}
+
+/* Responsive optimizations */
+@media (max-width: 768px) {
+  .product-grid-skeleton {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .dashboard-stats-skeleton {
+    grid-template-columns: 1fr !important;
+  }
+
+  .nav-items-skeleton {
+    display: none; /* Simplified mobile nav skeleton */
+  }
+}
+
+@media (max-width: 480px) {
+  .product-grid-skeleton {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Battery-aware animations */
+.low-power-mode .skeleton-shimmer {
+  animation: none !important;
+  background: #f0f0f0 !important;
+  opacity: 0.5;
+}
+
+/* Network-aware optimizations */
+.slow-2g-skeleton .skeleton-shimmer,
+.skeleton-2g .skeleton-shimmer {
+  animation-duration: 4s !important;
+  background: linear-gradient(90deg, #f0f0f0 50%, #e8e8e8 50%) !important;
+  background-size: 100% 100% !important;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer {
+    animation: none !important;
+    background: #f0f0f0 !important;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      #2a2a2a 25%,
+      #3a3a3a 50%,
+      #2a2a2a 75%
+    ) !important;
+  }
+
+  .product-card-skeleton {
+    background: #1a1a1a !important;
+    border-color: #3a3a3a !important;
+  }
+}

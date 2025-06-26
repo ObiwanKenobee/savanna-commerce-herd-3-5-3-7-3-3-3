@@ -1,0 +1,274 @@
+# 🦁 Savanna Marketplace AlertManager Configuration
+# Wildlife-themed alert routing for East Africa
+
+global:
+  smtp_smarthost: "localhost:587"
+  smtp_from: "alerts@savanna-marketplace.com"
+  smtp_auth_username: "alerts@savanna-marketplace.com"
+  smtp_auth_password: "${SMTP_PASSWORD}"
+
+# 🔄 Alert routing
+route:
+  group_by: ["alertname", "wildlife"]
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 12h
+  receiver: "savanna-team"
+  routes:
+    # 🚨 Critical alerts (immediate notification)
+    - match:
+        severity: critical
+      receiver: "critical-alerts"
+      group_wait: 0s
+      repeat_interval: 5m
+
+    # ⚠️ Warning alerts (business hours only)
+    - match:
+        severity: warning
+      receiver: "warning-alerts"
+      group_wait: 30s
+      repeat_interval: 2h
+
+    # 💰 Payment system alerts (always urgent)
+    - match:
+        team: payments
+      receiver: "payments-team"
+      group_wait: 5s
+      repeat_interval: 15m
+
+    # 🔒 Security alerts (immediate + escalation)
+    - match:
+        team: security
+      receiver: "security-team"
+      group_wait: 0s
+      repeat_interval: 5m
+
+    # 📱 Rural access alerts (USSD/SMS issues)
+    - match:
+        team: rural-access
+      receiver: "rural-team"
+      group_wait: 10s
+      repeat_interval: 30m
+
+# 📬 Receiver configurations
+receivers:
+  - name: "savanna-team"
+    email_configs:
+      - to: "team@savanna-marketplace.com"
+        subject: "🦁 Savanna Alert: {{ .GroupLabels.alertname }}"
+        body: |
+          {{ .CommonAnnotations.wildlife }} **{{ .GroupLabels.alertname }}**
+
+          **Environment:** {{ .CommonLabels.environment }}
+          **Severity:** {{ .CommonLabels.severity }}
+          **Team:** {{ .CommonLabels.team }}
+
+          **Description:**
+          {{ range .Alerts }}
+          - {{ .Annotations.description }}
+          {{ end }}
+
+          **Runbook:** {{ .CommonAnnotations.runbook_url }}
+
+          **Time:** {{ .CommonAnnotations.timestamp }}
+
+          ---
+          🦁 Savanna Marketplace Monitoring System
+
+    slack_configs:
+      - api_url: "${SLACK_WEBHOOK_URL}"
+        channel: "#alerts"
+        title: "{{ .CommonAnnotations.wildlife }} {{ .GroupLabels.alertname }}"
+        text: |
+          {{ range .Alerts }}
+          *{{ .Annotations.summary }}*
+          {{ .Annotations.description }}
+          {{ end }}
+
+  - name: "critical-alerts"
+    email_configs:
+      - to: "oncall@savanna-marketplace.com"
+        subject: "🚨 CRITICAL: {{ .GroupLabels.alertname }}"
+        body: |
+          {{ .CommonAnnotations.wildlife }} **CRITICAL ALERT**
+
+          **{{ .GroupLabels.alertname }}**
+
+          This is a critical system alert requiring immediate attention.
+
+          {{ range .Alerts }}
+          **Issue:** {{ .Annotations.summary }}
+          **Details:** {{ .Annotations.description }}
+          **Runbook:** {{ .Annotations.runbook_url }}
+          {{ end }}
+
+          **Escalation Policy:**
+          - 0-5 minutes: On-call engineer
+          - 5-15 minutes: Technical lead
+          - 15+ minutes: Platform director
+
+          🦁 Immediate response required
+
+    slack_configs:
+      - api_url: "${SLACK_WEBHOOK_URL}"
+        channel: "#critical-alerts"
+        title: "🚨 CRITICAL: {{ .GroupLabels.alertname }}"
+        text: |
+          <!channel> **CRITICAL SYSTEM ALERT**
+
+          {{ range .Alerts }}
+          *{{ .Annotations.summary }}*
+          {{ .Annotations.description }}
+
+          **Runbook:** {{ .Annotations.runbook_url }}
+          {{ end }}
+
+          **Escalation in progress...**
+        color: danger
+
+  - name: "warning-alerts"
+    slack_configs:
+      - api_url: "${SLACK_WEBHOOK_URL}"
+        channel: "#warnings"
+        title: "⚠️ Warning: {{ .GroupLabels.alertname }}"
+        text: |
+          {{ range .Alerts }}
+          {{ .Annotations.wildlife }} *{{ .Annotations.summary }}*
+          {{ .Annotations.description }}
+          {{ end }}
+        color: warning
+
+  - name: "payments-team"
+    email_configs:
+      - to: "payments@savanna-marketplace.com"
+        subject: "💰 Payment System Alert: {{ .GroupLabels.alertname }}"
+        body: |
+          **Payment System Alert**
+
+          {{ range .Alerts }}
+          **Issue:** {{ .Annotations.summary }}
+          **Impact:** {{ .Annotations.description }}
+          **M-Pesa Status:** Check Safaricom dashboard
+          **Revenue Impact:** Monitor real-time revenue metrics
+          {{ end }}
+
+          **Immediate Actions:**
+          1. Check M-Pesa API status
+          2. Verify payment reconciliation
+          3. Monitor failure rates
+          4. Contact Safaricom if needed
+
+    slack_configs:
+      - api_url: "${SLACK_WEBHOOK_URL}"
+        channel: "#payments"
+        title: "💰 Payment Alert: {{ .GroupLabels.alertname }}"
+        text: |
+          {{ range .Alerts }}
+          *{{ .Annotations.summary }}*
+          {{ .Annotations.description }}
+
+          **Check:** M-Pesa dashboard, reconciliation status
+          {{ end }}
+
+  - name: "security-team"
+    email_configs:
+      - to: "security@savanna-marketplace.com"
+        subject: "🔒 Security Alert: {{ .GroupLabels.alertname }}"
+        body: |
+          **SECURITY ALERT - IMMEDIATE ATTENTION REQUIRED**
+
+          {{ range .Alerts }}
+          **Threat:** {{ .Annotations.summary }}
+          **Details:** {{ .Annotations.description }}
+          **Vulture Watch Status:** {{ .Labels.vulture_watch_status }}
+          {{ end }}
+
+          **Response Actions:**
+          1. Investigate threat immediately
+          2. Check Vulture Watch AI logs
+          3. Review recent user activity
+          4. Consider temporary blocks if needed
+
+          **Escalation:** Auto-escalate to CISO after 10 minutes
+
+    slack_configs:
+      - api_url: "${SLACK_WEBHOOK_URL}"
+        channel: "#security"
+        title: "🦏 Security Alert: {{ .GroupLabels.alertname }}"
+        text: |
+          <!here> **SECURITY ALERT**
+
+          {{ range .Alerts }}
+          *{{ .Annotations.summary }}*
+          {{ .Annotations.description }}
+          {{ end }}
+
+          **Vulture Watch:** Active monitoring in progress
+        color: danger
+
+  - name: "rural-team"
+    email_configs:
+      - to: "rural-access@savanna-marketplace.com"
+        subject: "📱 Rural Access Alert: {{ .GroupLabels.alertname }}"
+        body: |
+          **Rural Access System Alert**
+
+          {{ range .Alerts }}
+          **Issue:** {{ .Annotations.summary }}
+          **Impact:** {{ .Annotations.description }}
+          **USSD Gateway:** Check Africa's Talking status
+          **Affected Users:** ~60% of retailer base (rural areas)
+          {{ end }}
+
+          **Priority Actions:**
+          1. Test USSD codes (*384*7#)
+          2. Check SMS delivery rates  
+          3. Verify Africa's Talking API
+          4. Monitor rural user sessions
+
+          **Business Impact:** Critical for rural retailer access
+
+    slack_configs:
+      - api_url: "${SLACK_WEBHOOK_URL}"
+        channel: "#rural-access"
+        title: "📱 USSD Alert: {{ .GroupLabels.alertname }}"
+        text: |
+          {{ range .Alerts }}
+          📱 *{{ .Annotations.summary }}*
+          {{ .Annotations.description }}
+
+          **Impact:** Rural retailer access affected
+          **Test:** Try *384*7# from Safaricom line
+          {{ end }}
+
+# 🔇 Inhibit rules (prevent spam)
+inhibit_rules:
+  - source_match:
+      severity: "critical"
+    target_match:
+      severity: "warning"
+    equal: ["alertname", "dev", "instance"]
+
+  - source_match:
+      alertname: "SavannaMarketplaceDown"
+    target_match_re:
+      alertname: ".*"
+    equal: ["instance"]
+
+# 🕐 Time-based routing (Kenya time UTC+3)
+time_intervals:
+  - name: "business-hours"
+    time_intervals:
+      - times:
+          - start_time: "08:00"
+            end_time: "18:00"
+        weekdays: ["monday:friday"]
+        location: "Africa/Nairobi"
+
+  - name: "weekend"
+    time_intervals:
+      - times:
+          - start_time: "00:00"
+            end_time: "23:59"
+        weekdays: ["saturday", "sunday"]
+        location: "Africa/Nairobi"

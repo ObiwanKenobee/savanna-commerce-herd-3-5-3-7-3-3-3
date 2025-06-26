@@ -1,0 +1,434 @@
+/* Neo-Savannah: Cyberpunk Wildlife Marketplace Styles */
+
+/* Import cyber fonts */
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap");
+
+/* Core Neo-Savannah Theme Variables */
+:root {
+  /* Time-based color schemes */
+  --cyber-dawn: linear-gradient(135deg, #ff6b35, #00ff9f, #00d4ff);
+  --digital-midday: linear-gradient(135deg, #00d4ff, #b048ff, #ffb000);
+  --neon-dusk: linear-gradient(135deg, #b048ff, #ff0080, #ffb000);
+  --quantum-night: linear-gradient(135deg, #0d0d0d, #1a1a2e, #00ff9f);
+
+  /* Effects */
+  --scanline-speed: 2s;
+  --glitch-intensity: 2px;
+  --hologram-glow: 0 0 20px currentColor;
+  --cyber-grid-size: 20px;
+}
+
+/* Base Neo-Savannah Styling */
+.neo-savannah-app {
+  background: var(--quantum-night);
+  color: #00ff9f;
+  font-family: "Space Grotesk", sans-serif;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Cyber Grid Background */
+.cyber-grid-bg {
+  background-image:
+    linear-gradient(rgba(0, 255, 159, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 159, 0.05) 1px, transparent 1px);
+  background-size: var(--cyber-grid-size) var(--cyber-grid-size);
+  position: relative;
+}
+
+.cyber-grid-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    rgba(13, 13, 13, 0.3) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Scanlines Effect */
+.scanlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanlines::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00ff9f, transparent);
+  animation: scanlines var(--scanline-speed) linear infinite;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Glitch Text Effect */
+.glitch-text {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-text::before {
+  animation: glitch-1 0.3s ease-in-out infinite alternate-reverse;
+  color: #00d4ff;
+  z-index: -1;
+}
+
+.glitch-text::after {
+  animation: glitch-2 0.3s ease-in-out infinite alternate-reverse;
+  color: #ff0080;
+  z-index: -2;
+}
+
+@keyframes glitch-1 {
+  0% {
+    transform: translateX(0) skew(0deg);
+  }
+  20% {
+    transform: translateX(-2px) skew(1deg);
+  }
+  40% {
+    transform: translateX(2px) skew(-1deg);
+  }
+  60% {
+    transform: translateX(-1px) skew(2deg);
+  }
+  80% {
+    transform: translateX(1px) skew(-2deg);
+  }
+  100% {
+    transform: translateX(0) skew(0deg);
+  }
+}
+
+@keyframes glitch-2 {
+  0% {
+    transform: translateX(0) skew(0deg);
+  }
+  25% {
+    transform: translateX(1px) skew(-1deg);
+  }
+  50% {
+    transform: translateX(-1px) skew(1deg);
+  }
+  75% {
+    transform: translateX(2px) skew(-2deg);
+  }
+  100% {
+    transform: translateX(0) skew(0deg);
+  }
+}
+
+/* Holographic Effects */
+.hologram {
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(0, 255, 159, 0.1) 50%,
+    transparent 70%
+  );
+  border: 1px solid rgba(0, 255, 159, 0.3);
+  box-shadow:
+    0 0 20px rgba(0, 255, 159, 0.3),
+    inset 0 0 20px rgba(0, 255, 159, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.hologram::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #00ff9f, #00d4ff, #b048ff, #ff0080);
+  z-index: -1;
+  border-radius: inherit;
+  animation: hologram-border 3s linear infinite;
+}
+
+@keyframes hologram-border {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+/* Neon Buttons */
+.neon-btn {
+  background: linear-gradient(45deg, #00ff9f, #00d4ff);
+  border: 2px solid #00ff9f;
+  color: #0d0d0d;
+  font-weight: 700;
+  font-family: "Orbitron", monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow:
+    0 0 20px rgba(0, 255, 159, 0.5),
+    inset 0 0 20px rgba(0, 212, 255, 0.2);
+}
+
+.neon-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.neon-btn:hover::before {
+  left: 100%;
+}
+
+.neon-btn:hover {
+  box-shadow:
+    0 0 30px rgba(0, 255, 159, 0.8),
+    inset 0 0 30px rgba(0, 212, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.neon-btn:active {
+  transform: translateY(0);
+  box-shadow:
+    0 0 15px rgba(0, 255, 159, 0.6),
+    inset 0 0 15px rgba(0, 212, 255, 0.3);
+}
+
+/* Cyber Cards */
+.cyber-card {
+  background: rgba(13, 13, 13, 0.8);
+  border: 1px solid rgba(0, 255, 159, 0.3);
+  border-radius: 0.75rem;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(0, 255, 159, 0.2);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.cyber-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #00ff9f, transparent);
+  animation: data-stream 3s ease-in-out infinite;
+}
+
+.cyber-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  border-color: rgba(0, 255, 159, 0.6);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(0, 255, 159, 0.4);
+}
+
+/* Digital Wildlife Icons */
+.digital-wildlife {
+  filter: drop-shadow(0 0 10px currentColor);
+  transition: all 0.3s ease;
+}
+
+.digital-wildlife:hover {
+  filter: drop-shadow(0 0 20px currentColor);
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Cyber Typography */
+.cyber-heading {
+  font-family: "Orbitron", monospace;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: linear-gradient(45deg, #00ff9f, #00d4ff, #b048ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 10px rgba(0, 255, 159, 0.5));
+}
+
+.digital-text {
+  font-family: "JetBrains Mono", monospace;
+  color: #00ff9f;
+  text-shadow: 0 0 10px rgba(0, 255, 159, 0.3);
+}
+
+/* Loading Animations */
+.quantum-loader {
+  width: 60px;
+  height: 60px;
+  border: 3px solid rgba(0, 255, 159, 0.2);
+  border-top: 3px solid #00ff9f;
+  border-radius: 50%;
+  animation: quantum-spin 1s linear infinite;
+  position: relative;
+}
+
+.quantum-loader::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(0, 212, 255, 0.5);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: quantum-spin 0.5s linear infinite reverse;
+}
+
+/* Particle Effect */
+.particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #00ff9f;
+  border-radius: 50%;
+  animation: float-particle 5s ease-in-out infinite;
+}
+
+@keyframes float-particle {
+  0% {
+    transform: translateY(100vh) translateX(0) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  90% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    transform: translateY(-10vh) translateX(50px) scale(0);
+    opacity: 0;
+  }
+}
+
+/* Time-based themes */
+.theme-cyberdawn {
+  background: var(--cyber-dawn);
+}
+
+.theme-digitalmidday {
+  background: var(--digital-midday);
+}
+
+.theme-neondusk {
+  background: var(--neon-dusk);
+}
+
+.theme-quantumnight {
+  background: var(--quantum-night);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  :root {
+    --cyber-grid-size: 15px;
+  }
+
+  .cyber-heading {
+    font-size: 1.5rem;
+  }
+
+  .neon-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .hologram {
+    border: 2px solid #00ff9f;
+  }
+
+  .cyber-card {
+    border: 2px solid #00ff9f;
+  }
+
+  .neon-btn {
+    border: 3px solid #00ff9f;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .scanlines::after,
+  .quantum-loader,
+  .hologram::before,
+  .particle {
+    animation: none;
+  }
+
+  .glitch-text::before,
+  .glitch-text::after {
+    animation: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .neo-savannah-app {
+    background: white !important;
+    color: black !important;
+  }
+
+  .scanlines::after,
+  .particles,
+  .hologram::before {
+    display: none;
+  }
+}

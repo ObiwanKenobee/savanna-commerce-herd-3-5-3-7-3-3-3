@@ -1,0 +1,226 @@
+# 🦁 Savanna Marketplace Development Environment
+# Complete local development stack with monitoring
+
+version: "3.8"
+
+services:
+  # 🌐 Web Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+      - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+      - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - savanna-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 🐘 PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: savanna_marketplace
+      POSTGRES_USER: savanna_admin
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-savanna_dev_password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - savanna-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U savanna_admin -d savanna_marketplace"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+  # ⚡ Redis Cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - savanna-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # 📊 Prometheus Monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/alerts:/etc/prometheus/alerts
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/etc/prometheus/console_libraries"
+      - "--web.console.templates=/etc/prometheus/consoles"
+      - "--storage.tsdb.retention.time=200h"
+      - "--web.enable-lifecycle"
+    networks:
+      - savanna-network
+    restart: unless-stopped
+
+  # 📈 Grafana Dashboards
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    networks:
+      - savanna-network
+    restart: unless-stopped
+
+  # 🚨 AlertManager
+  alertmanager:
+    image: prom/alertmanager:latest
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./monitoring/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - alertmanager_data:/alertmanager
+    command:
+      - "--config.file=/etc/alertmanager/alertmanager.yml"
+      - "--storage.path=/alertmanager"
+      - "--web.external-url=http://localhost:9093"
+    networks:
+      - savanna-network
+    restart: unless-stopped
+
+  # 🔍 Node Exporter (System Metrics)
+  node-exporter:
+    image: prom/node-exporter:latest
+    ports:
+      - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.rootfs=/rootfs"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+    networks:
+      - savanna-network
+    restart: unless-stopped
+
+  # 📊 Postgres Exporter
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:latest
+    ports:
+      - "9187:9187"
+    environment:
+      DATA_SOURCE_NAME: "postgresql://savanna_admin:${POSTGRES_PASSWORD:-savanna_dev_password}@postgres:5432/savanna_marketplace?sslmode=disable"
+    depends_on:
+      - postgres
+    networks:
+      - savanna-network
+    restart: unless-stopped
+
+  # ⚡ Redis Exporter
+  redis-exporter:
+    image: oliver006/redis_exporter:latest
+    ports:
+      - "9121:9121"
+    environment:
+      REDIS_ADDR: "redis://redis:6379"
+    depends_on:
+      - redis
+    networks:
+      - savanna-network
+    restart: unless-stopped
+
+  # 🌐 Nginx Exporter
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    ports:
+      - "9113:9113"
+    command:
+      - "-nginx.scrape-uri=http://app:8080/nginx_status"
+    depends_on:
+      - app
+    networks:
+      - savanna-network
+    restart: unless-stopped
+
+  # 📱 USSD Simulator (for testing)
+  ussd-simulator:
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - ./scripts/ussd-simulator:/app
+    ports:
+      - "3001:3001"
+    command: ["npm", "start"]
+    networks:
+      - savanna-network
+    restart: unless-stopped
+
+  # 🔒 Security Scanner
+  security-scanner:
+    image: aquasec/trivy:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - trivy_cache:/root/.cache/trivy
+    command: ["server", "--listen", "0.0.0.0:4954"]
+    ports:
+      - "4954:4954"
+    networks:
+      - savanna-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  alertmanager_data:
+    driver: local
+  trivy_cache:
+    driver: local
+
+networks:
+  savanna-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

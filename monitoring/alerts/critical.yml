@@ -1,0 +1,229 @@
+# 🦁 Savanna Marketplace Critical Alert Rules
+# Wildlife-themed alerts for East African marketplace
+
+groups:
+  - name: savanna_critical_alerts
+    interval: 30s
+    rules:
+      # 🚨 Application Health Alerts
+      - alert: SavannaMarketplaceDown
+        expr: up{job="savanna-marketplace"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          wildlife: "🦁"
+          team: platform
+        annotations:
+          summary: "🚨 Savanna Marketplace is DOWN"
+          description: "The main marketplace application has been down for more than 1 minute. Lions are roaring! 🦁"
+          runbook_url: "https://docs.savanna-marketplace.com/runbooks/app-down"
+
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: critical
+          wildlife: "🦏"
+          team: platform
+        annotations:
+          summary: "🔥 High Error Rate Detected - Rhino Charge!"
+          description: "Error rate is {{ $value | humanizePercentage }} for the last 5 minutes. Rhinos are charging! 🦏"
+
+      # 💰 Payment System Alerts
+      - alert: MPesaPaymentFailures
+        expr: rate(mpesa_payment_failures_total[5m]) > 0.05
+        for: 2m
+        labels:
+          severity: critical
+          wildlife: "💰"
+          team: payments
+        annotations:
+          summary: "💸 M-Pesa Payment Failures Spike"
+          description: "M-Pesa payment failure rate is {{ $value }} per second. Kenya's payment backbone is struggling!"
+
+      - alert: PaymentProcessingDown
+        expr: up{job="payment-service"} == 0
+        for: 30s
+        labels:
+          severity: critical
+          wildlife: "💳"
+          team: payments
+        annotations:
+          summary: "💳 Payment Processing Service Down"
+          description: "Payment processing service is completely down. Revenue stream blocked!"
+
+      # 📱 USSD System Alerts
+      - alert: USSDGatewayDown
+        expr: up{job="ussd-service"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          wildlife: "📱"
+          team: rural-access
+        annotations:
+          summary: "📱 USSD Gateway Down - Rural Access Lost"
+          description: "USSD gateway is down. 60% of rural retailers cannot access the platform!"
+
+      - alert: USSDHighLatency
+        expr: histogram_quantile(0.95, rate(ussd_request_duration_seconds_bucket[5m])) > 3
+        for: 3m
+        labels:
+          severity: warning
+          wildlife: "⏱️"
+          team: rural-access
+        annotations:
+          summary: "⏱️ USSD Response Time Too Slow"
+          description: "95th percentile USSD response time is {{ $value }}s. Rural users are waiting too long!"
+
+      # 🔍 Fraud Detection Alerts
+      - alert: VultureWatchDown
+        expr: up{job="fraud-detection-service"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          wildlife: "🔍"
+          team: security
+        annotations:
+          summary: "🔍 Vulture Watch Fraud Detection Down"
+          description: "Fraud detection system is offline. Marketplace is vulnerable to attacks!"
+
+      - alert: HighFraudAttempts
+        expr: rate(fraud_attempts_total[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+          wildlife: "🚨"
+          team: security
+        annotations:
+          summary: "🚨 High Fraud Attempt Rate"
+          description: "{{ $value }} fraud attempts per second detected. Vultures are circling!"
+
+      # 📊 Database Performance Alerts
+      - alert: DatabaseConnectionsHigh
+        expr: pg_stat_database_numbackends / pg_settings_max_connections > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          wildlife: "🐘"
+          team: database
+        annotations:
+          summary: "🐘 Database Connection Pool Nearly Full"
+          description: "Database connections are at {{ $value | humanizePercentage }}. Elephants need more watering holes!"
+
+      - alert: DatabaseDown
+        expr: up{job="postgres-exporter"} == 0
+        for: 30s
+        labels:
+          severity: critical
+          wildlife: "🐘"
+          team: database
+        annotations:
+          summary: "🐘 Database is Down - Data Drought!"
+          description: "PostgreSQL database is unreachable. Critical data drought detected!"
+
+      # 🚀 Performance Alerts
+      - alert: HighResponseTime
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+          wildlife: "🐌"
+          team: performance
+        annotations:
+          summary: "🐌 Slow Response Times - Not Cheetah Speed!"
+          description: "95th percentile response time is {{ $value }}s. Users expect cheetah speed!"
+
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          wildlife: "🧠"
+          team: infrastructure
+        annotations:
+          summary: "🧠 High Memory Usage - Elephant Memory Full"
+          description: "Memory usage is {{ $value | humanizePercentage }}. Even elephants forget sometimes!"
+
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 90
+        for: 5m
+        labels:
+          severity: warning
+          wildlife: "⚡"
+          team: infrastructure
+        annotations:
+          summary: "⚡ High CPU Usage - Lions Working Hard"
+          description: "CPU usage is {{ $value }}% on {{ $labels.instance }}. Lions are hunting hard!"
+
+      # 📦 Inventory System Alerts
+      - alert: InventorySyncLag
+        expr: inventory_sync_lag_seconds > 60
+        for: 2m
+        labels:
+          severity: warning
+          wildlife: "📦"
+          team: inventory
+        annotations:
+          summary: "📦 Inventory Sync Lagging Behind"
+          description: "Inventory sync is {{ $value }}s behind. Stock levels may be inaccurate!"
+
+      - alert: InventoryServiceDown
+        expr: up{job="inventory-sync"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          wildlife: "📦"
+          team: inventory
+        annotations:
+          summary: "📦 Inventory Service Down - Stock Blind"
+          description: "Inventory synchronization service is down. We're flying blind on stock levels!"
+
+      # 🌍 Network & Connectivity Alerts
+      - alert: HighNetworkLatency
+        expr: probe_duration_seconds{job="blackbox"} > 1
+        for: 3m
+        labels:
+          severity: warning
+          wildlife: "🌐"
+          team: network
+        annotations:
+          summary: "🌐 High Network Latency to Services"
+          description: "Network latency to {{ $labels.instance }} is {{ $value }}s. Savanna is vast, but this is too slow!"
+
+      # 💡 Business Metrics Alerts
+      - alert: LowOrderVolume
+        expr: rate(orders_total[1h]) < 5
+        for: 30m
+        labels:
+          severity: warning
+          wildlife: "📉"
+          team: business
+        annotations:
+          summary: "📉 Low Order Volume - Dry Season"
+          description: "Order rate is only {{ $value }} per second. Are we in a commercial dry season?"
+
+      - alert: RevenueDropSignificant
+        expr: (rate(revenue_total[1h]) - rate(revenue_total[1h] offset 1d)) / rate(revenue_total[1h] offset 1d) < -0.3
+        for: 1h
+        labels:
+          severity: warning
+          wildlife: "💰"
+          team: business
+        annotations:
+          summary: "💰 Significant Revenue Drop - Economic Drought"
+          description: "Revenue has dropped by {{ $value | humanizePercentage }} compared to yesterday. Economic drought detected!"
+
+  # 🚑 Recovery Actions
+  - name: savanna_recovery_actions
+    interval: 60s
+    rules:
+      - alert: AutoScaleTriggered
+        expr: increase(kube_pod_container_status_restarts_total[5m]) > 3
+        for: 1m
+        labels:
+          severity: info
+          wildlife: "🔄"
+          team: platform
+        annotations:
+          summary: "🔄 Auto-scaling Triggered - Herd Growing"
+          description: "Pod {{ $labels.pod }} has restarted {{ $value }} times. Herd is adapting to demand!"
